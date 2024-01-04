@@ -28,14 +28,15 @@ const uploadPost = async (req, res) => {
       message: "Success",
       data,
     });
-    const fileName = data.files.file[0].filepath;
-    const fileContent = await fs.readFileSync(fileName);
+    const file = data.files.file[0].filepath;
+    const fileName = data.files.file[0].originalFilename;
+    const fileContent = await fs.createReadStream(file);
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `${fileName}.jpg`,
+      Key: `${fileName}`,
       Body: fileContent,
     };
-    s3.upload(params, (err, s3Data) => {
+    await s3.upload(params, (err, s3Data) => {
       if (err) {
         console.error("Error uploading file:", err);
       } else {
