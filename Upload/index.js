@@ -5,8 +5,6 @@ const uploadRouter = require("./routes/uploadRoute");
 
 const port = process.env.PORT || 4003;
 
-require("dotenv").config();
-
 app.set("json spaces", 5);
 
 app.use("/", uploadRouter);
