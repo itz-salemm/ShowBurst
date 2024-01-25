@@ -25,7 +25,7 @@ const bucketName = process.env.AWS_BUCKET_NAME;
 let key = ""; // Changed key to let to allow reassignment
 //let key = "firstVideo.mp4";
 
-const streamView = async (req, res) => {
+const videoProcessorController = async (req, res) => {
   const range = req.headers.range;
   if (!range) {
     res.status(400).send("Requires range header");
@@ -66,22 +66,23 @@ const streamView = async (req, res) => {
   }
 };
 
-const getMovie = async (req, res) => {
+const getVideoIdController = async (req, res) => {
   res.render("movies", {});
 };
 
-const streamViewPost = async (req, res) => {
+const getVideoIdControllerPost = async (req, res) => {
+  console.log(req.body.data);
   key = req.body.data;
-  res.sendStatus(200);
+  res.redirect(302, "player");
 };
 
-const stream = async (req, res) => {
+const videoPlayerController = async (req, res) => {
   res.render("player", {});
 };
 
 module.exports = {
-  streamView,
-  getMovie,
-  streamViewPost,
-  stream,
+  videoProcessorController,
+  getVideoIdController,
+  getVideoIdControllerPost,
+  videoPlayerController,
 };
