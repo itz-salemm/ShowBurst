@@ -1,36 +1,47 @@
-const AWS = require("aws-sdk");
-
+const {
+  S3Client,
+  GetObjectCommand,
+  HeadObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { Readable } = require("stream");
 require("dotenv").config();
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const https = require("https");
+// Increase the default listener limit for TLSSocket instances
+https.Agent.defaultMaxSockets = 15; // or any number you deem appropriate
+// Set the max listeners to accommodate the limit
+https.Agent.setMaxListeners(15); // or the number you set above
+
+// Create S3 client with credentials and region
+const s3Client = new S3Client({
   region: process.env.AWS_REGION_NAME,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
 const bucketName = process.env.AWS_BUCKET_NAME;
-const key = "firstVideo.mp4";
+let key = ""; // Changed key to let to allow reassignment
+//let key = "firstVideo.mp4";
 
 const streamView = async (req, res) => {
-  console.log(req.body);
   const range = req.headers.range;
   if (!range) {
     res.status(400).send("Requires range header");
+    return;
   }
 
-  s3.headObject({ Bucket: bucketName, Key: key }, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error getting video information from S3");
-      return;
-    }
+  try {
+    const data = await s3Client.send(
+      new HeadObjectCommand({ Bucket: bucketName, Key: key })
+    );
 
     const videoSize = data.ContentLength;
     const CHUNK_SIZE = 10 ** 6;
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
     const contentLength = end - start + 1;
-
     const headers = {
       "Content-Range": `bytes ${start}-${end}/${videoSize}`,
       "Accept-Ranges": "bytes",
@@ -46,9 +57,13 @@ const streamView = async (req, res) => {
       Range: `bytes=${start}-${end}`,
     };
 
-    const videoStream = s3.getObject(params).createReadStream();
+    const { Body } = await s3Client.send(new GetObjectCommand(params));
+    const videoStream = Readable.from(Body); // Convert body to Readable stream
     videoStream.pipe(res);
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error getting video information from S3");
+  }
 };
 
 const getMovie = async (req, res) => {
@@ -56,7 +71,8 @@ const getMovie = async (req, res) => {
 };
 
 const streamViewPost = async (req, res) => {
-  console.log(req.body);
+  key = req.body.data;
+  res.sendStatus(200);
 };
 
 const stream = async (req, res) => {
