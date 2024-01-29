@@ -18,8 +18,8 @@ const getVideoIdController = async (req, res) => {
 };
 
 const getVideoIdControllerPost = async (req, res) => {
-  console.log(req.body.data);
-  key = req.body.data;
+  console.log(req.body.id);
+  key = req.body.id;
   res.redirect(302, "player");
 };
 

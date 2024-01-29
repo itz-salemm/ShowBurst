@@ -16,34 +16,66 @@
     </style>
   </head>
   <body>
-    <label for="inputField">Enter a value:</label>
-    <input type="text" id="inputField" placeholder="Type something..." />
+    <div id="cardContainer">
+      <!-- Movie cards will be dynamically added here -->
+    </div>
 
-    <button onclick="sendValueToBackend()">Send to Backend</button>
     <script>
-      function sendValueToBackend() {
-        // Get the value from the input field
-        const inputValue = document.getElementById("inputField").value;
+      // Function to handle the click event for movie cards
+      function movieCardClickHandler(event) {
+        const movieData = {
+          id: event.target.dataset.movieId,
+          title: event.target.dataset.movieTitle,
+          // Add more data properties as needed
+        };
 
-        // Define the backend URL
-        const backendUrl = "http://localhost:8000/videos";
+        // Send movie data to the backend
+        sendMovieDataToBackend(movieData);
+      }
 
-        // Make a POST request to the backend with the value
-        fetch(backendUrl, {
+      // Function to send movie data to the backend
+      function sendMovieDataToBackend(movieData) {
+        // Simulate sending movie data to the backend using fetch API
+        fetch("http://localhost:8000/videos", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json", // Specify the content type if sending JSON
-            // Add any other headers as needed
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            data: inputValue, // Send the value as part of the request body
-          }),
-        }).catch((error) => {
-          // Handle any errors that occurred during the fetch
-          console.error("Error during fetch:", error);
-        });
+          body: JSON.stringify(movieData),
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Movie data sent successfully!");
+            } else {
+              console.error("Failed to send movie data:", response.status);
+            }
+          })
+          .catch((error) => {
+            console.error("Error sending movie data:", error);
+          });
       }
+
+      // Create movie cards dynamically
+      const movies = [
+        { id: "firstVideo.mp4", title: "Movie 1" },
+        { id: "Screencast.mp4", title: "Movie 2" },
+        { id: 3, title: "Movie 3" },
+      ];
+
+      movies.forEach((movie) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.textContent = movie.title;
+
+        // Set data attributes for movie ID and title
+        card.dataset.movieId = movie.id;
+        card.dataset.movieTitle = movie.title;
+
+        // Add click event listener to each movie card
+        card.addEventListener("click", movieCardClickHandler);
+
+        document.getElementById("cardContainer").appendChild(card);
+      });
     </script>
   </body>
 </html>
-`
