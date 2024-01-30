@@ -18,9 +18,9 @@ const getVideoIdController = async (req, res) => {
 };
 
 const getVideoIdControllerPost = async (req, res) => {
-  console.log(req.body.id);
   key = req.body.id;
-  res.redirect(302, "player");
+  console.log(key);
+  res.render("movies", {});
 };
 
 const videoPlayerController = async (req, res) => {

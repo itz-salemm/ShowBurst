@@ -9,7 +9,7 @@
       body {
         margin: 5% auto;
         max-width: 100%;
-        background-color: rgb(14, 14, 14);
+        background-color: rgb(247, 247, 247);
         padding-top: 10%;
         padding-left: 35%;
       }
@@ -46,6 +46,7 @@
           .then((response) => {
             if (response.ok) {
               console.log("Movie data sent successfully!");
+              window.location.href = "http://localhost:8000";
             } else {
               console.error("Failed to send movie data:", response.status);
             }
