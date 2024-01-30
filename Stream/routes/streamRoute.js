@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { streamView, stream } = require("../controllers/streamController");
+const {
+  videoProcessorController,
+  videoPlayerController,
+  getVideoIdControllerPost,
+  getVideoIdController,
+} = require("../controllers/streamController");
 
-router.get("/video", streamView);
-router.get("/", stream);
+router.get("/video", videoProcessorController);
+router.get("/", videoPlayerController);
+router.get("/videos", getVideoIdController);
+router.post("/videos", getVideoIdControllerPost);
 
 module.exports = router;
