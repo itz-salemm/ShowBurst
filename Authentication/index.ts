@@ -24,7 +24,7 @@ app.use(
 const PORT: number = 4000;
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome To JWT Authentication </h1>");
+  res.send("<h1> Welcome To JWT Authentication </h1>");
 });
 
 app.post("/auth/register", async (req, res) => {
