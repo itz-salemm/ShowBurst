@@ -1,8 +1,13 @@
+const { Request, Response, NextFunction } = require("express");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
+// Configure environment variables
+dotenv.config();
+
+// Define custom interface for Request object
 const authMiddleware = (req, res, next) => {
-  const token = req.header("authToken")?.split(" ")[1];
-  //const token = req.headers.authorization?.split(" ")[1];
+  const token = req.header("authToken");
 
   if (!token) {
     return res
@@ -10,8 +15,14 @@ const authMiddleware = (req, res, next) => {
       .json({ message: "Authorization token not provided" });
   }
 
+  const secret = process.env.SECRET;
+
+  if (!secret) {
+    throw new Error("JWT secret is not defined in environment variables");
+  }
+
   try {
-    const decodedToken = jwt.verify(token, "secret_key");
+    const decodedToken = jwt.verify(token, secret);
     req.userData = decodedToken;
     next();
   } catch (error) {
