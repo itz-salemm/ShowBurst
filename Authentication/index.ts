@@ -3,7 +3,7 @@ import { Application } from "express";
 import { json } from "body-parser";
 import mongoose from "mongoose";
 import { authRouter } from "./routes/authRoute";
-import { authMiddleware } from "./middlewares/authMiddleware";
+import { verifyUser } from "./middlewares/verifyUser";
 import cors from "cors";
 import dotenv from "dotenv";
 
