@@ -11,7 +11,7 @@ interface RequestWithUserData extends ExpressRequest {
   userData?: { userId: string }; // Define your custom userData object structure here
 }
 
-export const authMiddleware = (
+export const verifyUser = (
   req: RequestWithUserData,
   res: Response,
   next: NextFunction
