@@ -79,6 +79,8 @@ export const loginUser = async (req: Request, res: Response) => {
       }
     );
 
+    res.header("authToken", token);
+
     // Send the response with the token
     res.status(200).json({
       status: 200,
