@@ -71,13 +71,15 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign(
-      { _id: user._id, email: user.email },
-      process.env.SECRET || "default_secret",
-      {
-        expiresIn: "1d",
-      }
-    );
+    const secret: string | undefined = process.env.SECRET;
+
+    if (!secret) {
+      throw new Error("JWT secret is not defined in environment variables");
+    }
+
+    const token = jwt.sign({ _id: user._id, email: user.email }, secret, {
+      expiresIn: "1d",
+    });
 
     res.header("authToken", token);
 
