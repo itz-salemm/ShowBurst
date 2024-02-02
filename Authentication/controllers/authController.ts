@@ -82,7 +82,10 @@ export const loginUser = async (req: Request, res: Response) => {
     });
 
     // Save token as a cookie
-    res.cookie("authToken", token, { httpOnly: true, maxAge: 86400000 }); // 1 day expiration
+    res.cookie("showBurstAuthToken", token, {
+      httpOnly: true,
+      maxAge: 86400000,
+    }); // 1 day expiration
 
     res.header("authToken", token);
 

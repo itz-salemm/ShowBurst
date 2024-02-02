@@ -7,7 +7,8 @@ dotenv.config();
 
 // Define custom interface for Request object
 const authMiddleware = (req, res, next) => {
-  const token = req.header("authToken");
+  const token = req.cookies.showBurstAuthToken;
+  //const token = req.header("authToken");
 
   if (!token) {
     return res
