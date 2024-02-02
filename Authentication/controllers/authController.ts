@@ -81,6 +81,9 @@ export const loginUser = async (req: Request, res: Response) => {
       expiresIn: "1d",
     });
 
+    // Save token as a cookie
+    res.cookie("authToken", token, { httpOnly: true, maxAge: 86400000 }); // 1 day expiration
+
     res.header("authToken", token);
 
     // Send the response with the token

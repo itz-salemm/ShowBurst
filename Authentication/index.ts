@@ -3,19 +3,23 @@ import { Application } from "express";
 import { json } from "body-parser";
 import mongoose from "mongoose";
 import { authRouter } from "./routes/authRoute";
-import { verifyUser } from "./middlewares/verifyUser";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import cookieParser from "cookie-parser";
+
 // Create the express app and  import the type of app from express;
 const app: Application = express();
+
+//configure env;
+dotenv.config();
 
 app.use(json());
 
 // Cors
 app.use(cors());
-//configure env;
-dotenv.config();
+// Use cookie-parser middleware
+app.use(cookieParser());
 // Parser
 app.use(express.json());
 app.use(
