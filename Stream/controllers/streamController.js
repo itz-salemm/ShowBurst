@@ -1,6 +1,7 @@
 const videoProcessor = require("../middlewares/videoProcessor.js");
 
-let key = ""; // Changed key to let to allow reassignment
+let key = "";
+let subtileBucketName = ""; // Changed key to let to allow reassignment
 //let key = "firstVideo.mp4";
 
 const videoProcessorController = async (req, res) => {
@@ -10,7 +11,7 @@ const videoProcessorController = async (req, res) => {
     return;
   }
 
-  videoProcessor(range, key, res);
+  videoProcessor(range, key, res, subtileBucketName);
 };
 
 const getVideoIdController = async (req, res) => {
@@ -19,6 +20,7 @@ const getVideoIdController = async (req, res) => {
 
 const getVideoIdControllerPost = async (req, res) => {
   key = req.body.id;
+  subtileBucketName = req.body.subtileBucketName;
   console.log(key);
   res.render("movies", {});
 };
