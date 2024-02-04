@@ -26,6 +26,7 @@
         const movieData = {
           id: event.target.dataset.movieId,
           title: event.target.dataset.movieTitle,
+          subtileBucketName: event.target.dataset.movieSubtileBucketName,
           // Add more data properties as needed
         };
 
@@ -58,9 +59,21 @@
 
       // Create movie cards dynamically
       const movies = [
-        { id: "firstVideo.mp4", title: "Movie 1" },
-        { id: "Screencast.mp4", title: "Movie 2" },
-        { id: 3, title: "Movie 3" },
+        {
+          id: "firstVideo.mp4",
+          title: "Movie 1",
+          subtileBucketName: "firstVideo.mp4",
+        },
+        {
+          id: "MIB2.mp4",
+          title: "Movie 2",
+          subtileBucketName: "MIB2.vtt",
+        },
+        {
+          id: "youtube.mp4",
+          title: "Movie 3",
+          subtileBucketName: "youtube.vtt",
+        },
       ];
 
       movies.forEach((movie) => {
@@ -71,6 +84,7 @@
         // Set data attributes for movie ID and title
         card.dataset.movieId = movie.id;
         card.dataset.movieTitle = movie.title;
+        card.dataset.movieSubtileBucketName = movie.subtileBucketName;
 
         // Add click event listener to each movie card
         card.addEventListener("click", movieCardClickHandler);

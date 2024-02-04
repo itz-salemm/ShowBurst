@@ -7,17 +7,24 @@
     <title>Video Streaming With Node</title>
     <style>
       body {
-        margin: 5% auto;
+        margin: auto;
         max-width: 100%;
         background-color: rgb(14, 14, 14);
-        padding-top: 10%;
-        padding-left: 35%;
+        padding: 10%;
       }
     </style>
   </head>
   <body>
-    <video id="videoPlayer" width="50%" controls muted="muted" autoplay>
+    <video id="videoPlayer" width="800" controls autoplay>
       <source src="/video" type="video/mp4" />
+      <!-- Add track element for subtitles -->
+      <track
+        src="/subtitle"
+        kind="captions"
+        srclang="en"
+        label="English"
+        default
+      />
     </video>
   </body>
 </html>
