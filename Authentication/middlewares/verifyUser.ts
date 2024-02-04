@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { Request as ExpressRequest } from "express";
+import { User } from "../models/userModel";
 
 import dotenv from "dotenv";
 
@@ -41,7 +42,7 @@ export const verifyUser = (
   }
 };
 
-export const verifyAdmin = (
+export const verifyAdmin = async (
   req: RequestWithUserData,
   res: Response,
   next: NextFunction
@@ -65,8 +66,13 @@ export const verifyAdmin = (
   try {
     const decodedToken = jwt.verify(token, secret);
     req.userData = decodedToken as { userId: string };
-    console.log(req.body.role);
-    if (req.body.role != "user") {
+    const email = req.body.email as string;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "USer not found" });
+    }
+
+    if (user.role != "user") {
       return res.status(401).json({ message: "Unauthorized" });
     } else {
       next();
