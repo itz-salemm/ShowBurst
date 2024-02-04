@@ -25,7 +25,7 @@ const videoProcessorController = async (req, res) => {
     return;
   }
 
-  videoProcessor(range, key, res, subtileBucketName);
+  videoProcessor(range, key, res);
 };
 
 const getVideoIdController = async (req, res) => {
@@ -48,7 +48,7 @@ const getSubtitle = async (req, res) => {
   try {
     const subtitleParams = {
       Bucket: bucketName,
-      Key: subtileBucketName, // Replace 'your-subtitle-key' with the actual key of your subtitle file
+      Key: subtileBucketName,
     };
 
     const subtitleData = await s3Client.send(

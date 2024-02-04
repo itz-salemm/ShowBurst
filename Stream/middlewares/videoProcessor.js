@@ -23,7 +23,7 @@ const s3Client = new S3Client({
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
-const videoProcessor = async (range, key, res, subtileBucketName) => {
+const videoProcessor = async (range, key, res) => {
   try {
     const data = await s3Client.send(
       new HeadObjectCommand({ Bucket: bucketName, Key: key })
@@ -39,21 +39,6 @@ const videoProcessor = async (range, key, res, subtileBucketName) => {
       "Accept-Ranges": "bytes",
       "Content-Length": contentLength,
       "Content-Type": "video/mp4",
-    };
-
-    // Fetch subtitle data
-    const subtitleParams = {
-      Bucket: bucketName,
-      Key: subtileBucketName,
-    };
-    const subtitleData = await s3Client.send(
-      new GetObjectCommand(subtitleParams)
-    );
-
-    // Set headers for subtitle data
-    const subtitleHeaders = {
-      "Content-Length": subtitleData.ContentLength,
-      "Content-Type": subtitleData.ContentType,
     };
 
     res.writeHead(206, headers);
