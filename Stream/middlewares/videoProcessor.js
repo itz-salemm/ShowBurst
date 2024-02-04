@@ -41,6 +41,21 @@ const videoProcessor = async (range, key, res, subtileBucketName) => {
       "Content-Type": "video/mp4",
     };
 
+    // Fetch subtitle data
+    const subtitleParams = {
+      Bucket: bucketName,
+      Key: subtileBucketName,
+    };
+    const subtitleData = await s3Client.send(
+      new GetObjectCommand(subtitleParams)
+    );
+
+    // Set headers for subtitle data
+    const subtitleHeaders = {
+      "Content-Length": subtitleData.ContentLength,
+      "Content-Type": subtitleData.ContentType,
+    };
+
     res.writeHead(206, headers);
 
     const params = {

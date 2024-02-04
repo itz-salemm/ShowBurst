@@ -18,6 +18,14 @@
   <body>
     <video id="videoPlayer" width="50%" controls muted="muted" autoplay>
       <source src="/video" type="video/mp4" />
+      <!-- Add track element for subtitles -->
+      <track
+        src="/subtitle"
+        kind="subtitles"
+        srclang="en"
+        label="English"
+        default
+      />
     </video>
   </body>
 </html>
